@@ -50,3 +50,42 @@ class Student:
             print(f'Махач отменяется!!! Я отличников не бью')
             return None
         print(f'Победитель махача {choice([self.name, enemy.name])}')
+
+
+class Normal_Student(Student):
+    '''
+    Подклассс класса студент
+    '''
+    def __init__(self, name: str = "Вася", age: int = 7, grade: str = "1А", favorite_subject: str = None,
+                 performance: dict = [4], classroom_teacher: str = "Дмитрий Валерьевич Акимов",
+                 personality_type: str = "технарь"):
+        super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type)
+
+
+class Social_Activity(Student):
+    '''
+    Подклассс класса студент
+    '''
+
+    def __init__(self, name: str = "Вася", age: int = 7, grade: str = "1А", favorite_subject: str = None,
+                 performance: dict = [4], classroom_teacher: str = "Дмитрий Валерьевич Акимов",
+                 personality_type: str = "технарь", list_of_social_activities: dict = ['звукарь', 'участник совета школы']):
+        super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type)
+        self.social_activities = list_of_social_activities
+    def go_to_party(self):
+        if len(self.social_activities) > 2:
+            print(f'Совсем время нет!')
+            return None
+        print(f'Пошли!')
+
+
+class Olympiadnik(Social_Activity):
+    '''
+    Подклассс класса социално активного студент
+    '''
+
+    def __init__(self, name: str = "Вася", age: int = 7, grade: str = "1А", favorite_subject: str = None,
+                 performance: dict = [4], classroom_teacher: str = "Дмитрий Валерьевич Акимов",
+                 personality_type: str = "технарь", list_of_social_activities: dict = ['звукарь', 'участник совета школы']):
+        super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type, list_of_social_activities)
+
