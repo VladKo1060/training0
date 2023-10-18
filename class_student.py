@@ -61,10 +61,24 @@ class Normal_Student(Student):
                  personality_type: str = "технарь"):
         super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type)
 
+    def scip_lesson(self):
+        if round(float(mean(self.performance)), 1) <= 3.6:
+            print(f'Я прогулял урок! :(')
+            self.performance += [2]
+            return None
+        elif 3.6 <= round(float(mean(self.performance)), 1) <= 4.6:
+            print(f'Я не прогулял урок!')
+            self.performance += [choice([3, 4, 5])]
+            return None
+        elif 4.6 <= round(float(mean(self.performance)), 1):
+            print(f'Я и не думал прогуливать урок!')
+            self.performance += [choice([4, 5])]
+            return None
 
-class Social_Activity(Student):
+
+class Social_Activity(Normal_Student):
     '''
-    Подклассс класса студент
+    Подклассс класса нормальный студент
     '''
 
     def __init__(self, name: str = "Вася", age: int = 7, grade: str = "1А", favorite_subject: str = None,
@@ -72,8 +86,9 @@ class Social_Activity(Student):
                  personality_type: str = "технарь", list_of_social_activities: dict = ['звукарь', 'участник совета школы']):
         super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type)
         self.social_activities = list_of_social_activities
+
     def go_to_party(self):
-        if len(self.social_activities) > 2:
+        if len(self.social_activities) >= 2:
             print(f'Совсем время нет!')
             return None
         print(f'Пошли!')
@@ -86,6 +101,11 @@ class Olympiadnik(Social_Activity):
 
     def __init__(self, name: str = "Вася", age: int = 7, grade: str = "1А", favorite_subject: str = None,
                  performance: dict = [4], classroom_teacher: str = "Дмитрий Валерьевич Акимов",
-                 personality_type: str = "технарь", list_of_social_activities: dict = ['звукарь', 'участник совета школы']):
-        super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type, list_of_social_activities)
+                 personality_type: str = "технарь", list_of_social_activities: dict = [], list_of_olympic: dict = ['матиматика']):
+        super().__init__(name, age, grade, favorite_subject, performance, classroom_teacher, personality_type, list_of_social_activities + ['олимпиады'])
+        self.list_of_olympic = list_of_olympic
+
+    def write_olimpiada(self, olympiad_number: int = 0):
+        scores = [i for i in range(0, 101)]
+        print(f'{self.name} получил на олимпиаде по предмету {self.list_of_olympic[olympiad_number]} {choice(scores)} баллов')
 
