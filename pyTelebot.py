@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, ParseMode
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, MessageHandler, Dispatcher, CallbackContext, Filters, CommandHandler, CallbackQueryHandler
 import logging
@@ -40,13 +40,15 @@ def do_echo(update: Update, context: CallbackContext):
 def do_start(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    text = 'Привет ёмаё!\n' \
-           'Команды:\n' \
-           '/start\n' \
-           '/k, /keyboard\n' \
-           '/k_i, /keyboard_inline'
+    text = f'<b><u>Привет ёмаё!</u></b>\n' \
+           '<i><b>Команды:</b></i>\n' \
+           '<i>/start - старт, помощь\n' \
+           '/k, /keyboard - клавиатура\n' \
+           '/k_i, /keyboard_inline - инлаин клавиатура</i>\n\n' \
+           '<a href="https://github.com/VladKo1060/training0/blob/main/pyTelebot.py">Git бота</a>'
 
-    update.message.reply_text(f'{user_id=}\n{user_name=}\n{text}')
+    update.message.reply_text(f'{user_id=}\n{user_name=}')
+    update.message.reply_text(f'{text}', parse_mode=ParseMode.HTML)
     logging.info(f'{user_id=}, {user_name=}, {text}')
 
 
