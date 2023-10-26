@@ -16,12 +16,14 @@ def main():
     start_handler = CommandHandler('start', do_start)
     keyboard_handler = CommandHandler(['k', 'keyboard'], do_keyboard)
     keyboard_inline_handler = CommandHandler(['k_i', 'keyboard_inline'], do_keyboard_inline)
+    set_timer_handler = CommandHandler('timer', set_timer)
     callback_handler = CallbackQueryHandler(keyboard_react)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(keyboard_handler)
     dispatcher.add_handler(keyboard_inline_handler)
     dispatcher.add_handler(callback_handler)
+    dispatcher.add_handler(set_timer_handler)
     dispatcher.add_handler(echo_handler)
 
     updater.start_polling()
@@ -44,7 +46,8 @@ def do_start(update: Update, context: CallbackContext):
            '<i><b>Команды:</b></i>\n' \
            '<i>/start - старт, помощь\n' \
            '/k, /keyboard - клавиатура\n' \
-           '/k_i, /keyboard_inline - инлаин клавиатура</i>\n\n' \
+           '/k_i, /keyboard_inline - инлаин клавиатура\n' \
+           '/timer</i>\n\n' \
            '<a href="https://github.com/VladKo1060/training0/blob/main/pyTelebot.py">Git бота</a>'
 
     update.message.reply_text(f'{user_id=}\n{user_name=}')
@@ -101,6 +104,21 @@ def keyboard_react(update: Update, context: CallbackContext):
     keyboard = InlineKeyboardMarkup(inline_buttons)
     queuy.edit_message_reply_markup(keyboard)  # (f'{user_id=}\nТхы што вхыврал?')
     logging.info(f'{user_id=}, функция радакции инлаин клавы')
+
+
+def set_timer(update: Update, context: CallbackContext):
+    context.bot_data['user_id'] = update.effective_user.id
+    context.bot_data['timer'] = 0
+    context.bot_data['timer_job'] = context.job_queue.run_repeating(show_second, 1)
+
+
+def show_second(context: CallbackContext):
+    context.bot_data['timer'] += 1
+    context.bot.send_message(context.bot_data['user_id'], f"Прошло {context.bot_data['timer']} секунд от начала")
+
+
+# def stop_timer(context: CallbackContext):
+#     context.bot_data['timer_job'].schedule_rem
 
 
 if __name__ == '__main__':
