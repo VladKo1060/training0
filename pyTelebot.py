@@ -14,7 +14,7 @@ def main():
     dispatcher: Dispatcher = updater.dispatcher
 
     echo_handler = MessageHandler(Filters.text, do_echo)
-    start_handler = CommandHandler('start', do_keyboard_inline)
+    start_handler = CommandHandler(['start', 'help'], do_keyboard_inline)
     keyboard_handler = CommandHandler(['k', 'keyboard'], do_keyboard)
     # keyboard_inline_handler = CommandHandler(['k_i', 'keyboard_inline'], do_keyboard_inline)
     set_timer_handler = MessageHandler(Filters.text('Старт'), set_timer)
