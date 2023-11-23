@@ -2,6 +2,7 @@ from datetime import datetime
 from telegram import Update, ReplyKeyboardMarkup, ParseMode
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, MessageHandler, Dispatcher, CallbackContext, Filters, CommandHandler, CallbackQueryHandler
+from FSM import conversation_handler
 import logging
 from key import TOKEN
 
@@ -22,6 +23,7 @@ def main():
     callback_handler = CallbackQueryHandler(keyboard_react)
 
     dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(conversation_handler)
     dispatcher.add_handler(keyboard_handler)
     # dispatcher.add_handler(keyboard_inline_handler)
     dispatcher.add_handler(callback_handler)
