@@ -3,6 +3,7 @@ from telegram.ext import Updater, MessageHandler, Dispatcher, CallbackContext, F
 import logging
 from key import TOKEN
 from class_human import Human
+from db import Data_Base
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 WAIT_NAME, WAIT_SURNAME, WAIT_MIDDLE_NAME, WAIT_PHONE_NUMBER, WAIT_BIRTHDAY = range(5)
 
 user = Human()
+db = Data_Base('Bot_Date_Base')
 
 
 def ask_name(update: Update, context: CallbackContext):
@@ -112,8 +114,9 @@ def register(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию register')
+    db.write_to_date_base(user_id, user.surname, user.name, user.middle_name, user.phone_number, user.birthday)
     update.message.reply_text(f'Зарегестрировал тебя')
-    user.data_print()
+    # user.data_print()
 
     return ConversationHandler.END
 
