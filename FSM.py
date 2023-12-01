@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 WAIT_NAME, WAIT_SURNAME, WAIT_MIDDLE_NAME, WAIT_PHONE_NUMBER, WAIT_BIRTHDAY = range(5)
 
-user = Human()
+# user = Human()
 db = Data_Base('Bot_Date_Base')
 
 
@@ -27,7 +27,7 @@ def ask_name(update: Update, context: CallbackContext):
 def get_name(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    user.name = update.message.text
+    context.user_data['name'] = update.message.text
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию get_name')
     update.message.reply_text(f'Получил твоё имя')
 
@@ -46,7 +46,7 @@ def ask_surname(update: Update, context: CallbackContext):
 def get_surname(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    user.surname = update.message.text
+    context.user_data['surname'] = update.message.text
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию get_surname')
     update.message.reply_text(f'Получил твою фамилию')
 
@@ -65,7 +65,7 @@ def ask_middle_name(update: Update, context: CallbackContext):
 def get_middle_name(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    user.middle_name = update.message.text
+    context.user_data['middle_name'] = update.message.text
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию get_middle_name')
     update.message.reply_text(f'Получил твоё отчество')
 
@@ -84,7 +84,7 @@ def ask_phone_number(update: Update, context: CallbackContext):
 def get_phone_number(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    user.phone_number = update.message.text
+    context.user_data['phone_number'] = update.message.text
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию get_phone_number')
     update.message.reply_text(f'Получил твой номер телефона')
 
@@ -103,7 +103,7 @@ def ask_birthday(update: Update, context: CallbackContext):
 def get_birthday(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
-    user.birthday = update.message.text
+    context.user_data['birthday'] = update.message.text
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию get_birthday')
     update.message.reply_text(f'Получил твой день рождения')
 
@@ -114,8 +114,15 @@ def register(update: Update, context: CallbackContext):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
     logging.info(f'{user_id=}, {user_name=},  вызвал функцию register')
-    db.write_to_date_base(user_id, user.surname, user.name, user.middle_name, user.phone_number, user.birthday)
-    update.message.reply_text(f'Зарегестрировал тебя')
+    # context.user_data['name'] = update.message.text
+    db.write_to_date_base(user_id,
+                          context.user_data['surname'],
+                          context.user_data['name'],
+                          context.user_data['middle_name'],
+                          context.user_data['phone_number'],
+                          context.user_data['birthday'])
+    text = '\n'.join(db.find_user_by_id(user_id))
+    update.message.reply_text(f'Зарегестрировал тебя с данными:\n{text}')
     # user.data_print()
 
     return ConversationHandler.END

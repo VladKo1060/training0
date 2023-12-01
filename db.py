@@ -9,7 +9,7 @@ class Data_Base:
         with open(self.file_name, 'a', encoding='UTF-8') as file:
             pass
 
-    def write_to_date_base(self,
+    def write_to_date_base(self,                                                                                        # TODO ренайминг
                            date_base_id: int = None,
                            surname: str = None,
                            name: str = None,
@@ -25,7 +25,7 @@ class Data_Base:
             file.write(f'{phone_number}\t')
             file.write(f'{birthday}\n')
 
-    def scan_and_write_to_date_base(self,
+    def scan_and_write_to_date_base(self,                                                                               # TODO ренайминг
                                     date_base_id: int = None,
                                     surname: str = None,
                                     name: str = None,
@@ -46,13 +46,13 @@ class Data_Base:
             file.write(f'{birthday}\n')
             return True
 
-    def scan_and_delite_write_to_date_base(self,
-                                           date_base_id: int = None,
-                                           surname: str = None,
-                                           name: str = None,
-                                           middle_name: str = None,
-                                           phone_number: str = None,
-                                           birthday: str = None
+    def scan_and_delite_write_to_date_base(self,                                                                        # TODO ренайминг
+                                           date_base_id: int,
+                                           surname: str,
+                                           name: str,
+                                           middle_name: str,
+                                           phone_number: str,
+                                           birthday: str
                                            ):
         flag = False
         new_data = ''
@@ -91,7 +91,21 @@ class Data_Base:
 
         # f'{date_base_id}\t{surname}\t{name}\t{middle_name}\t{phone_number}\t{birthday}\n'
 
+    def find_user_by_id(self, userid: int):                                                                             # TODO ренайминг
+        with open(self.file_name, 'r', encoding='UTF-8') as file:
+            for line in file.readlines():
+                user_data = line.strip().split('\t')
+                if str(userid) in user_data[0]:
+                    return user_data # {'id': user_data[0],
+                           #  'surname': user_data[1],
+                           #  'name': user_data[3],
+                           #  'middle_name': user_data[4],
+                           #  'phone_number': user_data[5],
+                           #  'birthday': user_data[6]
+                           #  }
+
 
 if __name__ == '__main__':
     db = Data_Base('Bot_Date_Base')
-    print(db.scan_and_delite_write_to_date_base(1, 'surname', 'name', 'middle_name', 'phone_number', 'birthday'))
+    # db.write_to_date_base(1, 'uipwregb', 'oirtgbjn', 'oeritgbjnk', 'iojhrb', 'eoibjke')
+    print(db.find_user_by_id(1752005502))
