@@ -1,6 +1,6 @@
 class Data_Base:
     """
-    Класс работы с текстовыми файлами в качестве баз данных
+    Класс работы с файлами в качестве баз данных
     Класс написан под определённые задачи, поэтому у него такая неуневерсальная архитектура
     """
 
@@ -9,14 +9,14 @@ class Data_Base:
         with open(self.file_name, 'a', encoding='UTF-8') as file:
             pass
 
-    def write_to_date_base(self,                                                                                        # TODO ренайминг
-                           date_base_id: int = None,
-                           surname: str = None,
-                           name: str = None,
-                           middle_name: str = None,
-                           phone_number: str = None,
-                           birthday: str = None
-                           ):
+    def write(self,
+              date_base_id: int = None,
+              surname: str = None,
+              name: str = None,
+              middle_name: str = None,
+              phone_number: str = None,
+              birthday: str = None
+              ):
         with open(self.file_name, 'a', encoding='UTF-8') as file:
             file.write(f'{date_base_id}\t')
             file.write(f'{surname}\t')
@@ -25,18 +25,18 @@ class Data_Base:
             file.write(f'{phone_number}\t')
             file.write(f'{birthday}\n')
 
-    def scan_and_write_to_date_base(self,                                                                               # TODO ренайминг
-                                    date_base_id: int = None,
-                                    surname: str = None,
-                                    name: str = None,
-                                    middle_name: str = None,
-                                    phone_number: str = None,
-                                    birthday: str = None
-                                    ):
-        with open(self.file_name, 'r', encoding='UTF-8') as file:
-            for s in file.readlines():
-                if str(date_base_id) in s:
-                    return False
+    def scan_and_write(self,
+                       date_base_id: int = None,
+                       surname: str = None,
+                       name: str = None,
+                       middle_name: str = None,
+                       phone_number: str = None,
+                       birthday: str = None
+                       ):
+
+        if self.find_user_by_id(date_base_id) is not None:
+            return False
+
         with open(self.file_name, 'a', encoding='UTF-8') as file:
             file.write(f'{date_base_id}\t')
             file.write(f'{surname}\t')
@@ -46,14 +46,14 @@ class Data_Base:
             file.write(f'{birthday}\n')
             return True
 
-    def scan_and_delite_write_to_date_base(self,                                                                        # TODO ренайминг
-                                           date_base_id: int,
-                                           surname: str,
-                                           name: str,
-                                           middle_name: str,
-                                           phone_number: str,
-                                           birthday: str
-                                           ):
+    def scan_and_delite_write(self,
+                              date_base_id: int,
+                              surname: str,
+                              name: str,
+                              middle_name: str,
+                              phone_number: str,
+                              birthday: str
+                              ):
         flag = False
         new_data = ''
         line_number = 0
@@ -91,21 +91,38 @@ class Data_Base:
 
         # f'{date_base_id}\t{surname}\t{name}\t{middle_name}\t{phone_number}\t{birthday}\n'
 
-    def find_user_by_id(self, userid: int):                                                                             # TODO ренайминг
-        with open(self.file_name, 'r', encoding='UTF-8') as file:
-            for line in file.readlines():
-                user_data = line.strip().split('\t')
-                if str(userid) in user_data[0]:
-                    return user_data # {'id': user_data[0],
-                           #  'surname': user_data[1],
-                           #  'name': user_data[3],
-                           #  'middle_name': user_data[4],
-                           #  'phone_number': user_data[5],
-                           #  'birthday': user_data[6]
-                           #  }
+    def find_user_by_id(self, userid: int, id_str: bool = False):
+        """
+        id_str - параметр, отвечающий за тип возвращаемых данных.
+                 Если он равен True, то в словаре будед возвращено str значение id, иначе int
+        """
+        if id_str:
+            with open(self.file_name, 'r', encoding='UTF-8') as file:
+                for line in file.readlines():
+                    user_data = line.strip().split('\t')
+                    if str(userid) == user_data[0]:
+                        return {'id': user_data[0],
+                                'surname': user_data[1],
+                                'name': user_data[2],
+                                'middle_name': user_data[3],
+                                'phone_number': user_data[4],
+                                'birthday': user_data[5]
+                                }
+        else:
+            with open(self.file_name, 'r', encoding='UTF-8') as file:
+                for line in file.readlines():
+                    user_data = line.strip().split('\t')
+                    if str(userid) == user_data[0]:
+                        return {'id': int(user_data[0]),
+                                'surname': user_data[1],
+                                'name': user_data[2],
+                                'middle_name': user_data[3],
+                                'phone_number': user_data[4],
+                                'birthday': user_data[5]
+                                }
 
 
 if __name__ == '__main__':
     db = Data_Base('Bot_Date_Base')
-    # db.write_to_date_base(1, 'uipwregb', 'oirtgbjn', 'oeritgbjnk', 'iojhrb', 'eoibjke')
-    print(db.find_user_by_id(1752005502))
+    # print(db.scan_and_write(1, 'uipwregb', 'oirtgbjn', 'oeritgbjnk', 'iojhrb', 'eoibjke'))
+    print(db.find_user_by_id(1))  # 752005502
